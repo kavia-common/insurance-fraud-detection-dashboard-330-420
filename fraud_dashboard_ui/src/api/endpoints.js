@@ -2,9 +2,16 @@ import { apiFetch } from "./client";
 
 // PUBLIC_INTERFACE
 export async function uploadClaimsCsv(file) {
-  /** Upload a CSV file to the backend for parsing/scoring. */
+  /** Upload a CSV file to the backend for parsing/scoring.
+   *
+   * Must be sent as multipart/form-data with field name "file"
+   * to match backend endpoint: POST /api/claims/upload
+   */
   const form = new FormData();
   form.append("file", file);
+
+  // Important: do NOT set Content-Type header manually for FormData;
+  // the browser will add the correct multipart boundary.
   return apiFetch("/api/claims/upload", { method: "POST", body: form });
 }
 
